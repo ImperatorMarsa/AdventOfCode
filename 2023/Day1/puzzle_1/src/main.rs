@@ -64,6 +64,26 @@ fn get_numbers_from_string(line: String) -> String {
     return numbers;
 }
 
+#[test]
+fn get_numbers_from_string_test() {
+    assert_eq!(
+        get_numbers_from_string("1abc2".to_string()),
+        "12".to_string()
+    );
+    assert_eq!(
+        get_numbers_from_string("pqr3stu8vwx".to_string()),
+        "38".to_string()
+    );
+    assert_eq!(
+        get_numbers_from_string("a1b2c3d4e5f".to_string()),
+        "12345".to_string()
+    );
+    assert_eq!(
+        get_numbers_from_string("treb7uchet".to_string()),
+        "7".to_string()
+    );
+}
+
 fn normalyze_numer(nubmer: String) -> String {
     match nubmer.chars().count() {
         0 => "".to_string(),
@@ -76,4 +96,12 @@ fn normalyze_numer(nubmer: String) -> String {
             format!("{}{}", first_diget, last_diget)
         }
     }
+}
+
+#[test]
+fn normalyze_numer_test() {
+    assert_eq!(normalyze_numer("12".to_string()), "12".to_string());
+    assert_eq!(normalyze_numer("38".to_string()), "38".to_string());
+    assert_eq!(normalyze_numer("12345".to_string()), "15".to_string());
+    assert_eq!(normalyze_numer("7".to_string()), "77".to_string());
 }
