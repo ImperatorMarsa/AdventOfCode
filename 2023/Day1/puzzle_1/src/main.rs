@@ -1,4 +1,3 @@
-use core::panic;
 use std::{
     fs::File,
     io::{self, BufRead},
@@ -9,27 +8,8 @@ fn main() {
     if let Ok(lines) = read_lines("input/input.txt") {
         for line in lines {
             if let Ok(raw_calibration_value) = line {
-                let mut raw_calibration_value_chars = raw_calibration_value.chars();
-
-                let mut calibration_value = String::new();
-                loop {
-                    match raw_calibration_value_chars.next() {
-                        Some(result) => {
-                            let tmp_string = String::from(result);
-                            match tmp_string.parse::<u32>() {
-                                Ok(_) => calibration_value.push(result),
-                                Err(_) => (),
-                            };
-                        }
-                        None => {
-                            break;
-                        }
-                    };
-                }
-                println!(
-                    "calibration_value {} {}",
-                    calibration_value, raw_calibration_value
-                );
+                let calibration_value = get_numbers_from_string(raw_calibration_value);
+                println!("calibration_value {}", calibration_value);
             }
         }
     }
@@ -41,4 +21,25 @@ where
 {
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
+}
+
+fn get_numbers_from_string(line: String) -> String {
+    let mut line_chars = line.chars();
+    let mut numbers = String::new();
+    loop {
+        match line_chars.next() {
+            Some(result) => {
+                let tmp_string = String::from(result);
+                match tmp_string.parse::<u32>() {
+                    Ok(_) => numbers.push(result),
+                    Err(_) => (),
+                };
+            }
+            None => {
+                break;
+            }
+        };
+    }
+
+    return numbers;
 }
