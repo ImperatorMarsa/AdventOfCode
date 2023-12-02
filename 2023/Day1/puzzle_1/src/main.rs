@@ -8,7 +8,8 @@ fn main() {
     if let Ok(lines) = read_lines("input/input.txt") {
         for line in lines {
             if let Ok(raw_calibration_value) = line {
-                let calibration_value = get_numbers_from_string(raw_calibration_value);
+                let calibration_value =
+                    normalyze_numer(get_numbers_from_string(raw_calibration_value));
                 println!("calibration_value {}", calibration_value);
             }
         }
@@ -42,4 +43,18 @@ fn get_numbers_from_string(line: String) -> String {
     }
 
     return numbers;
+}
+
+fn normalyze_numer(nubmer: String) -> String {
+    match nubmer.chars().count() {
+        0 => "".to_string(),
+        1 => format!("{}{}", nubmer, nubmer),
+        2 => nubmer,
+        _ => {
+            let (first_diget, other_digets) = nubmer.split_at(1);
+            let (_, last_diget) = other_digets.split_at(other_digets.chars().count() - 1);
+
+            format!("{}{}", first_diget, last_diget)
+        }
+    }
 }
