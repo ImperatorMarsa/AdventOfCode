@@ -6,13 +6,23 @@ use std::{
 
 fn main() {
     if let Ok(lines) = read_lines("input/input.txt") {
+        let mut result = 0;
         for line in lines {
             if let Ok(raw_calibration_value) = line {
                 let calibration_value =
                     normalyze_numer(get_numbers_from_string(raw_calibration_value));
-                println!("calibration_value {}", calibration_value);
+
+                if calibration_value.is_empty() {
+                    continue;
+                }
+                match calibration_value.parse::<u32>() {
+                    Ok(number) => result += number,
+                    Err(error) => println!("This {} is not number!!: {}", calibration_value, error),
+                };
             }
         }
+
+        println!("The sum of all of the calibration values: {}", result);
     }
 }
 
