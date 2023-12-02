@@ -1,3 +1,4 @@
+use core::panic;
 use std::{
     fs::File,
     io::{self, BufRead},
@@ -5,24 +6,32 @@ use std::{
 };
 
 fn main() {
-    if let Ok(lines) = read_lines("input/input.txt") {
-        let mut result = 0;
-        for line in lines {
-            if let Ok(raw_calibration_value) = line {
-                let calibration_value =
-                    normalyze_numer(get_numbers_from_string(raw_calibration_value));
+    match read_lines("input/input.txt") {
+        Ok(lines) => {
+            let mut result = 0;
+            for line in lines {
+                match line {
+                    Ok(raw_calibration_value) => {
+                        let calibration_value =
+                            normalyze_numer(get_numbers_from_string(raw_calibration_value));
 
-                if calibration_value.is_empty() {
-                    continue;
-                }
-                match calibration_value.parse::<u32>() {
-                    Ok(number) => result += number,
-                    Err(error) => println!("This {} is not number!!: {}", calibration_value, error),
+                        if calibration_value.is_empty() {
+                            continue;
+                        }
+                        match calibration_value.parse::<u32>() {
+                            Ok(number) => result += number,
+                            Err(error) => {
+                                panic!("This {} is not number!!: {:?}", calibration_value, error)
+                            }
+                        };
+                    }
+                    Err(error) => panic!("Can't read from line: {:?}", error),
                 };
             }
-        }
 
-        println!("The sum of all of the calibration values: {}", result);
+            println!("The sum of all of the calibration values: {}", result);
+        }
+        Err(error) => panic!("Can't read from file: {:?}", error),
     }
 }
 
