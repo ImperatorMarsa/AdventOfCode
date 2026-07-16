@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Day01;
 
-use AoC\Day01\Solution;
+use AoC\Day01\Solver;
 use PHPUnit\Framework\TestCase;
 
-final class SolutionTest extends TestCase
+final class SolverTest extends TestCase
 {
     public function testDialRotate(): void
     {
-        $solution = new Solution();
+        $solution = new Solver();
 
         $result = $solution->rotate(11, 'R8');
         self::assertSame(19, $result);
