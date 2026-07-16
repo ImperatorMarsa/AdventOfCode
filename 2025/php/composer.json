@@ -1,0 +1,22 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "autoload": {
+        "psr-4": {
+            "AoC\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.2"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

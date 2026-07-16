@@ -1,2 +1,6 @@
 **/inputs/*.txt
 !**/inputs/.gitkeep
+
+**/vendor/
+
+**/php/*.cache
