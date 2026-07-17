@@ -8,6 +8,9 @@ use Exception;
 
 final class Solver
 {
+    private const MAX_POSITION = 100;
+    private const MIN_POSITION = 0;
+
     private const LEFT_DIRECTION = 'L';
     private const RIGHT_DIRECTION = 'R';
     private const ALLOW_DIRECTIONS = [
@@ -20,7 +23,18 @@ final class Solver
         $direction = $this->getDerection($rotation);
         $steps = $this->getSteps($rotation);
 
-        return $position + $direction * $steps;
+        $newPositon = $position + $direction * $steps;
+        if ($newPositon == self::MAX_POSITION) {
+            return 0;
+        }
+        if ($newPositon > self::MAX_POSITION) {
+            return self::MAX_POSITION - ($newPositon - self::MAX_POSITION);
+        }
+        if ($newPositon < self::MIN_POSITION) {
+            return self::MAX_POSITION - abs($newPositon);
+        }
+
+        return $newPositon;
     }
 
     private function getDerection(string $rotation): int
@@ -40,10 +54,15 @@ final class Solver
             throw new Exception("Колличество шагов не является целым числом: {$steps}.");
         }
         $steps = (int)$steps;
-        if ($steps > 99 || $steps < 0) {
+        if ($steps < self::MIN_POSITION) {
             throw new Exception("Колличество шагов вне диапазона: {$steps}.");
         }
+        $fullRotationCount = (int) round(
+            $steps / self::MAX_POSITION,
+            0,
+            PHP_ROUND_HALF_DOWN
+        );
 
-        return $steps;
+        return $steps - $fullRotationCount * self::MAX_POSITION;
     }
 }
