@@ -1,5 +1,6 @@
-**/inputs/*.txt
-!**/inputs/.gitkeep
+**/__inputs/*.txt
+**/__inputs/*/*.txt
+!**/__inputs/.gitkeep
 
 **/vendor/
 
