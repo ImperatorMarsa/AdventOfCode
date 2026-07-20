@@ -20,24 +20,24 @@ final class Solver
 
     public function rotate(int $position, string $rotation): int
     {
-        $direction = $this->getDerection($rotation);
+        $direction = $this->getDirection($rotation);
         $steps = $this->getSteps($rotation);
 
-        $newPositon = $position + $direction * $steps;
-        if ($newPositon == self::MAX_POSITION) {
+        $newPosition = $position + $direction * $steps;
+        if ($newPosition == self::MAX_POSITION) {
             return 0;
         }
-        if ($newPositon > self::MAX_POSITION) {
-            return self::MAX_POSITION - ($newPositon - self::MAX_POSITION);
+        if ($newPosition > self::MAX_POSITION) {
+            return self::MAX_POSITION - ($newPosition - self::MAX_POSITION);
         }
-        if ($newPositon < self::MIN_POSITION) {
-            return self::MAX_POSITION - abs($newPositon);
+        if ($newPosition < self::MIN_POSITION) {
+            return self::MAX_POSITION - abs($newPosition);
         }
 
-        return $newPositon;
+        return $newPosition;
     }
 
-    private function getDerection(string $rotation): int
+    private function getDirection(string $rotation): int
     {
         $direction = strtoupper(substr($rotation, 0, 1));
         if (!in_array($direction, self::ALLOW_DIRECTIONS)) {
