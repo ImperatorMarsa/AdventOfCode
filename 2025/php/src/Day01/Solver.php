@@ -39,7 +39,21 @@ final class Solver
 
     public function getCode(string $rotations): int
     {
-        return 0;
+        $rotations = preg_split("/\r\n|\n|\r/", $rotations);
+
+        $position = 50;
+        $zeroCounter = 0;
+        foreach ($rotations as $rotation) {
+            if (empty($rotation)) {
+                continue;
+            }
+
+            $position = $this->rotate($position, $rotation);
+            if ($position == 0) {
+                $zeroCounter++;
+            }
+        }
+        return $zeroCounter;
     }
 
     private function getDirection(string $rotation): int
