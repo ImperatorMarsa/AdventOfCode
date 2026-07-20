@@ -37,6 +37,11 @@ final class Solver
         return $newPosition;
     }
 
+    public function getCode(string $rotations): int
+    {
+        return 0;
+    }
+
     private function getDirection(string $rotation): int
     {
         $direction = strtoupper(substr($rotation, 0, 1));

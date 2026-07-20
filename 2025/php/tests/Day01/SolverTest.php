@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Day01;
 
+use AoC\common\Input;
 use AoC\Day01\Solver;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -27,5 +28,17 @@ final class SolverTest extends TestCase
 
         $result = $solution->rotate($position, $rotation);
         self::assertSame($expected, $result);
+    }
+
+    public function testGetCode(): void
+    {
+        $basePath = dirname(__DIR__, 3) . '/__examples';
+        $input = new Input($basePath);
+
+        $rotations = $input->forDay(1);
+        $solution = new Solver();
+
+        $result = $solution->getCode($rotations);
+        self::assertSame(3, $result);
     }
 }
