@@ -8,7 +8,7 @@ use Exception;
 
 final class Solver
 {
-    private const MAX_POSITION = 100;
+    private const MAX_POSITION = 99;
     private const MIN_POSITION = 0;
 
     private const LEFT_DIRECTION = 'L';
@@ -20,18 +20,16 @@ final class Solver
 
     public function rotate(int $position, string $rotation): int
     {
+        $maxPositionOverflow = self::MAX_POSITION + 1;
         $direction = $this->getDirection($rotation);
         $steps = $this->getSteps($rotation);
 
         $newPosition = $position + $direction * $steps;
-        if ($newPosition == self::MAX_POSITION) {
-            return 0;
-        }
         if ($newPosition > self::MAX_POSITION) {
-            return self::MAX_POSITION - ($newPosition - self::MAX_POSITION);
+            return $newPosition - $maxPositionOverflow;
         }
         if ($newPosition < self::MIN_POSITION) {
-            return self::MAX_POSITION - abs($newPosition);
+            return $maxPositionOverflow + $newPosition;
         }
 
         return $newPosition;
@@ -63,7 +61,14 @@ final class Solver
             throw new Exception("Неопределённый тип направления: {$direction}.");
         }
 
-        return $direction == self::LEFT_DIRECTION ? -1 : 1;
+        if ($direction == self::LEFT_DIRECTION) {
+            return -1;
+        }
+        if ($direction == self::RIGHT_DIRECTION) {
+            return 1;
+        }
+
+        return 0;
     }
 
     private function getSteps(string $rotation): int
@@ -76,12 +81,7 @@ final class Solver
         if ($steps < self::MIN_POSITION) {
             throw new Exception("Колличество шагов вне диапазона: {$steps}.");
         }
-        $fullRotationCount = (int) round(
-            $steps / self::MAX_POSITION,
-            0,
-            PHP_ROUND_HALF_DOWN
-        );
 
-        return $steps - $fullRotationCount * self::MAX_POSITION;
+        return $steps;
     }
 }

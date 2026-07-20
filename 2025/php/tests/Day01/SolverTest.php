@@ -14,10 +14,13 @@ final class SolverTest extends TestCase
     public static function additionProvider(): array
     {
         return [
-            [11, 'R8',  19],
+            [11, 'R8',   19],
             [19, 'L19',  0],
-            [5,  'L10', 95],
+            [05, 'L10',  95],
             [95, 'R5',   0],
+            [00, 'R101', 1],
+            [50, 'L50',  0],
+            [50, 'L68',  82],
         ];
     }
 
