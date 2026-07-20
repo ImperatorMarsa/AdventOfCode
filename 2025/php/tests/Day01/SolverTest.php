@@ -21,6 +21,7 @@ final class SolverTest extends TestCase
             [00, 'R101', 1],
             [50, 'L50',  0],
             [50, 'L68',  82],
+            [20, 'R201', 21],
         ];
     }
 

@@ -8,8 +8,9 @@ use Exception;
 
 final class Solver
 {
-    private const MAX_POSITION = 99;
     private const MIN_POSITION = 0;
+    private const MAX_POSITION = 99;
+    private const MAX_POSITION_OVERFLOW = self::MAX_POSITION + 1;
 
     private const LEFT_DIRECTION = 'L';
     private const RIGHT_DIRECTION = 'R';
@@ -20,16 +21,15 @@ final class Solver
 
     public function rotate(int $position, string $rotation): int
     {
-        $maxPositionOverflow = self::MAX_POSITION + 1;
         $direction = $this->getDirection($rotation);
         $steps = $this->getSteps($rotation);
 
         $newPosition = $position + $direction * $steps;
         if ($newPosition > self::MAX_POSITION) {
-            return $newPosition - $maxPositionOverflow;
+            return $newPosition - self::MAX_POSITION_OVERFLOW;
         }
         if ($newPosition < self::MIN_POSITION) {
-            return $maxPositionOverflow + $newPosition;
+            return self::MAX_POSITION_OVERFLOW + $newPosition;
         }
 
         return $newPosition;
@@ -81,7 +81,12 @@ final class Solver
         if ($steps < self::MIN_POSITION) {
             throw new Exception("Колличество шагов вне диапазона: {$steps}.");
         }
+        $fullRotationCount = (int) round(
+            $steps / self::MAX_POSITION_OVERFLOW,
+            0,
+            PHP_ROUND_HALF_DOWN
+        );
 
-        return $steps;
+        return $steps - $fullRotationCount * self::MAX_POSITION_OVERFLOW;
     }
 }
