@@ -66,6 +66,11 @@ final class Solver
         return $zeroCounter;
     }
 
+    public function getRealCode(string $rotations): int
+    {
+        return 0;
+    }
+
     private function getDirection(string $rotation): int
     {
         $direction = strtoupper(substr($rotation, 0, 1));
