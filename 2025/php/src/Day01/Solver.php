@@ -10,7 +10,7 @@ final class Solver
 {
     private const MIN_POSITION = 0;
     private const MAX_POSITION = 99;
-    private const MAX_POSITION_OVERFLOW = self::MAX_POSITION + 1;
+    private const STEP = 1;
 
     private const LEFT_DIRECTION = 'L';
     private const RIGHT_DIRECTION = 'R';
@@ -19,9 +19,16 @@ final class Solver
         self::RIGHT_DIRECTION,
     ];
 
-    public function rotate(int $position, string $rotation): int
+    private $dail = [];
+
+    public function __construct()
     {
-        ['position' => $newPosition, 'fullRotationCount' => $_] = $this->rotateWithZeroCount($position, $rotation);
+        $this->resetDail();
+    }
+
+    public function rotate(string $rotation): int
+    {
+        ['position' => $newPosition, 'fullRotationCount' => $_] = $this->rotateWithZeroCount($rotation);
 
         return $newPosition;
     }
@@ -32,19 +39,24 @@ final class Solver
      *     fullRotationCount: int
      * }
      */
-    public function rotateWithZeroCount(int $position, string $rotation): array
+    public function rotateWithZeroCount(string $rotation): array
     {
         $direction = $this->getDirection($rotation);
         $steps = $this->getSteps($rotation);
 
-        $newPosition = $position + $direction * $steps;
-        if ($newPosition > self::MAX_POSITION) {
-            $newPosition = $newPosition - self::MAX_POSITION_OVERFLOW;
-        } else if ($newPosition < self::MIN_POSITION) {
-            $newPosition = self::MAX_POSITION_OVERFLOW + $newPosition;
+        $fullRotationCount = 0;
+        for ($i = 0; $i < $steps; $i++) {
+            if ($direction == self::LEFT_DIRECTION) {
+                $this->rotaitDailToLeft();
+            } else {
+                $this->rotaitDailToRight();
+            }
+            if ($this->getDailPosition() == self::MIN_POSITION) {
+                $fullRotationCount++;
+            }
         }
 
-        return ['position' => $newPosition, 'fullRotationCount' => 0];
+        return ['position' => $this->getDailPosition(), 'fullRotationCount' => $fullRotationCount];
     }
 
     public function getCode(string $rotations): int
@@ -59,6 +71,13 @@ final class Solver
         return $counter;
     }
 
+    public function setDail(int $startPosition): void
+    {
+        for ($i = 0; $i < $startPosition; $i++) {
+            $this->rotaitDailToRight();
+        }
+    }
+
     /**
      * @return array{
      *     zeroPositionCounter: int,
@@ -67,9 +86,10 @@ final class Solver
      */
     private function getPositionAndRotationZeroCount(string $rotations): array
     {
+        $this->setDail(50);
+
         $rotations = preg_split("/\r\n|\n|\r/", $rotations);
 
-        $position = 50;
         $zeroCounter = 0;
         $zeroPositionCounter = 0;
         foreach ($rotations as $rotation) {
@@ -77,7 +97,7 @@ final class Solver
                 continue;
             }
 
-            ['position' => $position, 'fullRotationCount' => $count] = $this->rotate($position, $rotation);
+            ['position' => $position, 'fullRotationCount' => $count] = $this->rotateWithZeroCount($rotation);
             $zeroCounter += $count;
             if ($position == 0) {
                 $zeroPositionCounter++;
@@ -89,14 +109,14 @@ final class Solver
         ];
     }
 
-    private function getDirection(string $rotation): int
+    private function getDirection(string $rotation): string
     {
         $direction = strtoupper(substr($rotation, 0, 1));
         if (!in_array($direction, self::ALLOW_DIRECTIONS)) {
             throw new Exception("Неопределённый тип направления: {$direction}.");
         }
 
-        return $direction == self::LEFT_DIRECTION ? -1 : 1;
+        return $direction;
     }
 
     private function getSteps(string $rotation): int
@@ -109,12 +129,29 @@ final class Solver
         if ($steps < self::MIN_POSITION) {
             throw new Exception("Колличество шагов вне диапазона: {$steps}.");
         }
-        $fullRotationCount = (int) round(
-            $steps / self::MAX_POSITION_OVERFLOW,
-            0,
-            PHP_ROUND_HALF_DOWN
-        );
 
-        return $steps - $fullRotationCount * self::MAX_POSITION_OVERFLOW;
+        return $steps;
+    }
+
+    private function resetDail(): void
+    {
+        $this->dail = range(self::MIN_POSITION, self::MAX_POSITION, self::STEP);
+    }
+
+    private function rotaitDailToRight(): void
+    {
+        $elementToEnd = array_shift($this->dail);
+        array_push($this->dail, $elementToEnd);
+    }
+
+    private function rotaitDailToLeft(): void
+    {
+        $elementToStart = array_pop($this->dail);
+        array_unshift($this->dail, $elementToStart);
+    }
+
+    private function getDailPosition(): int
+    {
+        return array_first($this->dail);
     }
 }

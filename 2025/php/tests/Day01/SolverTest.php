@@ -105,7 +105,8 @@ final class SolverTest extends TestCase
     {
         $solution = new Solver();
 
-        $result = $solution->rotate($position, $rotation);
+        $solution->setDail($position);
+        $result = $solution->rotate($rotation);
         self::assertSame($expected, $result);
     }
 
@@ -118,10 +119,11 @@ final class SolverTest extends TestCase
     ): void {
         $solution = new Solver();
 
+        $solution->setDail($position);
         [
             'position' => $result,
             'fullRotationCount' => $count
-        ] = $solution->rotateWithZeroCount($position, $rotation);
+        ] = $solution->rotateWithZeroCount($rotation);
 
         self::assertSame($expectedPosition, $result);
         self::assertSame($expectedCount, $count);
