@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SolverTest extends TestCase
 {
-    public static function additionProvider(): array
+    public static function rotationData(): array
     {
         return [
             [11, 'R8',   19],
@@ -25,13 +25,39 @@ final class SolverTest extends TestCase
         ];
     }
 
-    #[DataProvider('additionProvider')]
+    public static function fullZeroCountData(): array
+    {
+        return [
+            [00, 'R101', 1,  1],
+            [95, 'R60',  55, 1],
+            [55, 'L55',  0,  0],
+            [82, 'L30',  52, 0],
+            [14, 'L82',  32, 1],
+            [20, 'R201', 21, 2],
+        ];
+    }
+
+    #[DataProvider('rotationData')]
     public function testDialRotate(int $position, string $rotation, int $expected): void
     {
         $solution = new Solver();
 
         $result = $solution->rotate($position, $rotation);
         self::assertSame($expected, $result);
+    }
+
+    #[DataProvider('fullZeroCountData')]
+    public function testDialFullRotateCount(
+        int $position,
+        string $rotation,
+        int $expectedPosition,
+        int $expectedCount
+    ): void {
+        $solution = new Solver();
+
+        ['position' => $result, 'fullRotationCount' => $count] = $solution->rotateWithZeroCount($position, $rotation);
+        self::assertSame($expectedPosition, $result);
+        self::assertSame($expectedCount, $count);
     }
 
     public function testGetCode(): void

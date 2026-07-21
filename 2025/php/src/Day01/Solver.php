@@ -21,18 +21,30 @@ final class Solver
 
     public function rotate(int $position, string $rotation): int
     {
+        ['position' => $newPosition, 'fullRotationCount' => $_] = $this->rotateWithZeroCount($position, $rotation);
+
+        return $newPosition;
+    }
+
+    /**
+     * @return array{
+     *     position: int,
+     *     fullRotationCount: int
+     * }
+     */
+    public function rotateWithZeroCount(int $position, string $rotation): array
+    {
         $direction = $this->getDirection($rotation);
         $steps = $this->getSteps($rotation);
 
         $newPosition = $position + $direction * $steps;
         if ($newPosition > self::MAX_POSITION) {
-            return $newPosition - self::MAX_POSITION_OVERFLOW;
-        }
-        if ($newPosition < self::MIN_POSITION) {
-            return self::MAX_POSITION_OVERFLOW + $newPosition;
+            $newPosition = $newPosition - self::MAX_POSITION_OVERFLOW;
+        } else if ($newPosition < self::MIN_POSITION) {
+            $newPosition = self::MAX_POSITION_OVERFLOW + $newPosition;
         }
 
-        return $newPosition;
+        return ['position' => $newPosition, 'fullRotationCount' => 0];
     }
 
     public function getCode(string $rotations): int
@@ -61,14 +73,7 @@ final class Solver
             throw new Exception("Неопределённый тип направления: {$direction}.");
         }
 
-        if ($direction == self::LEFT_DIRECTION) {
-            return -1;
-        }
-        if ($direction == self::RIGHT_DIRECTION) {
-            return 1;
-        }
-
-        return 0;
+        return $direction == self::LEFT_DIRECTION ? -1 : 1;
     }
 
     private function getSteps(string $rotation): int
