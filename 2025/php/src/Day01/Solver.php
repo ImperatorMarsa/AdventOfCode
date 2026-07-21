@@ -49,26 +49,44 @@ final class Solver
 
     public function getCode(string $rotations): int
     {
+        ['zeroPositionCounter' => $counter, 'zeroCounter' => $_] = $this->getPositionAndRotationZeroCount($rotations);
+        return $counter;
+    }
+
+    public function getRealCode(string $rotations): int
+    {
+        ['zeroPositionCounter' => $_, 'zeroCounter' => $counter] = $this->getPositionAndRotationZeroCount($rotations);
+        return $counter;
+    }
+
+    /**
+     * @return array{
+     *     zeroPositionCounter: int,
+     *     zeroCounter: int
+     * }
+     */
+    private function getPositionAndRotationZeroCount(string $rotations): array
+    {
         $rotations = preg_split("/\r\n|\n|\r/", $rotations);
 
         $position = 50;
         $zeroCounter = 0;
+        $zeroPositionCounter = 0;
         foreach ($rotations as $rotation) {
             if (empty($rotation)) {
                 continue;
             }
 
-            $position = $this->rotate($position, $rotation);
+            ['position' => $position, 'fullRotationCount' => $count] = $this->rotate($position, $rotation);
+            $zeroCounter += $count;
             if ($position == 0) {
-                $zeroCounter++;
+                $zeroPositionCounter++;
             }
         }
-        return $zeroCounter;
-    }
-
-    public function getRealCode(string $rotations): int
-    {
-        return 0;
+        return [
+            'zeroPositionCounter' => $zeroPositionCounter,
+            'zeroCounter' => $zeroCounter
+        ];
     }
 
     private function getDirection(string $rotation): int
