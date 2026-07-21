@@ -59,13 +59,13 @@ final class Solver
         return ['position' => $this->getDailPosition(), 'fullRotationCount' => $fullRotationCount];
     }
 
-    public function getCode(string $rotations): int
+    public function solvePartOne(string $rotations): int
     {
         ['zeroPositionCounter' => $counter, 'zeroCounter' => $_] = $this->getPositionAndRotationZeroCount($rotations);
         return $counter;
     }
 
-    public function getRealCode(string $rotations): int
+    public function solvePartTwo(string $rotations): int
     {
         ['zeroPositionCounter' => $_, 'zeroCounter' => $counter] = $this->getPositionAndRotationZeroCount($rotations);
         return $counter;
@@ -121,11 +121,10 @@ final class Solver
 
     private function getSteps(string $rotation): int
     {
-        $steps = substr($rotation, 1);
-        if (!is_numeric($steps)) {
+        $steps = filter_var(substr($rotation, 1), FILTER_VALIDATE_INT);
+        if ($steps === false) {
             throw new Exception("Колличество шагов не является целым числом: {$steps}.");
         }
-        $steps = (int)$steps;
         if ($steps < self::MIN_POSITION) {
             throw new Exception("Колличество шагов вне диапазона: {$steps}.");
         }

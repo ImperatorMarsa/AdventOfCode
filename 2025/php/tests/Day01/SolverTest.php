@@ -137,7 +137,7 @@ final class SolverTest extends TestCase
         $rotations = $input->forDay(1);
         $solution = new Solver();
 
-        $result = $solution->getCode($rotations);
+        $result = $solution->solvePartOne($rotations);
         self::assertSame(3, $result);
     }
 
@@ -149,7 +149,7 @@ final class SolverTest extends TestCase
         $rotations = $input->forDay(1);
         $solution = new Solver();
 
-        $result = $solution->getRealCode($rotations);
+        $result = $solution->solvePartTwo($rotations);
         self::assertSame(6, $result);
     }
 }
