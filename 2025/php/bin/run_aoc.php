@@ -1,6 +1,7 @@
 <?php
 
 use AoC\common\Input;
+use AoC\common\Solution;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -32,6 +33,18 @@ if (!class_exists($calssName)) {
 }
 
 $solution = new $calssName();
+if (!$solution instanceof Solution) {
+    fwrite(
+        STDERR,
+        sprintf(
+            "Класс %s должен реализовывать %s.\n",
+            $calssName,
+            Solution::class,
+        ),
+    );
+    exit(1);
+}
+
 $basePath = dirname(__DIR__, 2) . '/__inputs';
 $input = new Input($basePath);
 $contents = $input->forDay($day);

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace AoC\Day01;
 
+use AoC\common\Solution;
 use Exception;
 
-final class Solver
+final class Solver implements Solution
 {
     private const MIN_POSITION = 0;
     private const MAX_POSITION = 99;
