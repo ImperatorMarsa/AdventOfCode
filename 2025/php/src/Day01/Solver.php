@@ -60,15 +60,15 @@ final class Solver implements Solution
         return ['position' => $this->getDailPosition(), 'fullRotationCount' => $fullRotationCount];
     }
 
-    public function solvePartOne(string $rotations): int
+    public function solvePartOne(string $input): int
     {
-        ['zeroPositionCounter' => $counter, 'zeroCounter' => $_] = $this->getPositionAndRotationZeroCount($rotations);
+        ['zeroPositionCounter' => $counter, 'zeroCounter' => $_] = $this->getPositionAndRotationZeroCount($input);
         return $counter;
     }
 
-    public function solvePartTwo(string $rotations): int
+    public function solvePartTwo(string $input): int
     {
-        ['zeroPositionCounter' => $_, 'zeroCounter' => $counter] = $this->getPositionAndRotationZeroCount($rotations);
+        ['zeroPositionCounter' => $_, 'zeroCounter' => $counter] = $this->getPositionAndRotationZeroCount($input);
         return $counter;
     }
 
