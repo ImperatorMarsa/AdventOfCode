@@ -110,6 +110,23 @@ final class SolverTest extends TestCase
         self::assertSame($expected, $result);
     }
 
+    public function testSetDial(): void
+    {
+        $solution = new Solver();
+
+        $solution->setDial(50);
+        $result = $solution->getDialPosition();
+        self::assertSame(50, $result);
+
+        $solution->setDial(50);
+        $result = $solution->getDialPosition();
+        self::assertSame(50, $result);
+
+        $solution->setDial(1);
+        $result = $solution->getDialPosition();
+        self::assertSame(1, $result);
+    }
+
     #[DataProvider('fullZeroCountData')]
     public function testDialFullRotateCount(
         int $position,
