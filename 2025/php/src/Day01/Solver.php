@@ -20,11 +20,12 @@ final class Solver implements Solution
         self::RIGHT_DIRECTION,
     ];
 
-    private $dail = [];
+    /** @var array<int> */
+    private array $dail = [];
 
     public function __construct()
     {
-        $this->resetDail();
+        $this->resetDial();
     }
 
     public function rotate(string $rotation): int
@@ -48,16 +49,16 @@ final class Solver implements Solution
         $fullRotationCount = 0;
         for ($i = 0; $i < $steps; $i++) {
             if ($direction == self::LEFT_DIRECTION) {
-                $this->rotaitDailToLeft();
+                $this->rotateDialToLeft();
             } else {
-                $this->rotaitDailToRight();
+                $this->rotateDialToRight();
             }
-            if ($this->getDailPosition() == self::MIN_POSITION) {
+            if ($this->getDialPosition() == self::MIN_POSITION) {
                 $fullRotationCount++;
             }
         }
 
-        return ['position' => $this->getDailPosition(), 'fullRotationCount' => $fullRotationCount];
+        return ['position' => $this->getDialPosition(), 'fullRotationCount' => $fullRotationCount];
     }
 
     public function solvePartOne(string $input): int
@@ -72,7 +73,7 @@ final class Solver implements Solution
         return $counter;
     }
 
-    public function setDail(int $startPosition): void
+    public function setDial(int $startPosition): void
     {
         if ($startPosition < self::MIN_POSITION or $startPosition > self::MAX_POSITION) {
             throw new Exception(sprintf(
@@ -82,7 +83,7 @@ final class Solver implements Solution
             ));
         }
         if ($startPosition == self::MIN_POSITION) {
-            $this->resetDail();
+            $this->resetDial();
 
             return;
         }
@@ -101,7 +102,7 @@ final class Solver implements Solution
      */
     private function getPositionAndRotationZeroCount(string $rotations): array
     {
-        $this->setDail(50);
+        $this->setDial(50);
 
         $rotations = preg_split("/\r\n|\n|\r/", $rotations);
 
@@ -147,24 +148,24 @@ final class Solver implements Solution
         return $steps;
     }
 
-    private function resetDail(): void
+    private function resetDial(): void
     {
         $this->dail = range(self::MIN_POSITION, self::MAX_POSITION, self::STEP);
     }
 
-    private function rotaitDailToRight(): void
+    private function rotateDialToRight(): void
     {
         $elementToEnd = array_shift($this->dail);
         array_push($this->dail, $elementToEnd);
     }
 
-    private function rotaitDailToLeft(): void
+    private function rotateDialToLeft(): void
     {
         $elementToStart = array_pop($this->dail);
         array_unshift($this->dail, $elementToStart);
     }
 
-    private function getDailPosition(): int
+    public function getDialPosition(): int
     {
         return array_first($this->dail);
     }
