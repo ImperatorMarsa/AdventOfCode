@@ -74,9 +74,23 @@ final class Solver implements Solution
 
     public function setDail(int $startPosition): void
     {
-        for ($i = 0; $i < $startPosition; $i++) {
-            $this->rotaitDailToRight();
+        if ($startPosition < self::MIN_POSITION or $startPosition > self::MAX_POSITION) {
+            throw new Exception(sprintf(
+                "Начальная позиция должна находиться в диапазоне между %02d и %02d\n",
+                self::MIN_POSITION,
+                self::MAX_POSITION
+            ));
         }
+        if ($startPosition == self::MIN_POSITION) {
+            $this->resetDail();
+
+            return;
+        }
+
+        $this->dail = [
+            ...range($startPosition, self::MAX_POSITION, self::STEP),
+            ...range(self::MIN_POSITION, $startPosition - self::STEP, self::STEP)
+        ];
     }
 
     /**
