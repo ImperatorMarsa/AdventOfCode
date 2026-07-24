@@ -30,4 +30,23 @@ final class SolverTest extends TestCase
         $result = $solution->isRepeatedPattern($pattern);
         self::assertSame($expected, !is_null($result));
     }
+
+    public static function idRange(): array
+    {
+        return [
+            ['11-22', [11, 22]],
+            ['95-115', [99]],
+            ['998-1012', [1010]],
+            ['1698522-1698528', []],
+        ];
+    }
+
+    #[DataProvider('idRange')]
+    public function testIdRange(string $idRange, array $expected): void
+    {
+        $solution = new Solver();
+
+        $result = $solution->getRepeatedPatterns($idRange);
+        self::assertSame($expected, $result);
+    }
 }
